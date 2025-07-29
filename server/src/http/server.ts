@@ -1,5 +1,7 @@
-import express, { Response, Request } from 'express'
+import express from 'express'
 import cors from "cors"
+import { errorHandler } from '../middleware/errorHandler'
+import UserRoutes from '../routes/UserRoutes'
 
 
 const app = express()
@@ -7,10 +9,8 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 
-app.get('/', (req: Request, res: Response) => {
-    res.status(200).json({
-        message: 'funcionou'
-    })
-})
+app.use(UserRoutes)
+
+app.use(errorHandler)
 
 export default app
