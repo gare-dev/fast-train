@@ -1,0 +1,17 @@
+{
+  "name": "fast-train",
+  "private": true,
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "scripts": {
+    "dev:server": "npm --workspace server run dev"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
