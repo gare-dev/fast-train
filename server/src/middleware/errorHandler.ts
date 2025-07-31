@@ -11,5 +11,5 @@ export function errorHandler(err: unknown, req: Request, res: Response, next: Ne
     }
 
     console.error("Unexpected error. " + err)
-    return res.status(500).json({ error: "Server error." })
+    return res.status(500).json({ error: "Server error.", code: (err as string).toString() })
 }

@@ -19,4 +19,58 @@ model Users {
   name     String
   email    String @unique
   password String
+
+  ExercisesEnum ExercisesEnum[] @relation("UserExercises")
+  Workouts      Workouts[]      @relation("UserWorkouts")
+}
+
+model ExercisesEnum {
+  idExercise   Int    @id @default(autoincrement()) @map("id_exercise")
+  idUser       Int    @map("id_user")
+  exerciseName String @map("exercise_name")
+  muscle       String
+  description  String
+
+  user Users @relation("UserExercises", fields: [idUser], references: [idUser])
+
+  workoutExercise WorkoutExercises[]
+
+  @@map("exercises_enum")
+}
+
+model Workouts {
+  idWorkout   Int      @id @default(autoincrement()) @map("id_workout")
+  idUser      Int      @map("id_user")
+  workoutName String   @map("workout_name")
+  date        DateTime @default(now())
+
+  user Users @relation("UserWorkouts", fields: [idUser], references: [idUser])
+
+  WorkoutExercises WorkoutExercises[]
+
+  @@map("workouts")
+}
+
+model WorkoutExercises {
+  idWorkoutExercise Int @id @default(autoincrement()) @map("id_workout_exercise")
+  idWorkout         Int @map("id_workout")
+  idExercise        Int @map("id_exercise")
+
+  workoutEnum ExercisesEnum @relation(fields: [idExercise], references: [idExercise])
+  workout     Workouts      @relation(fields: [idWorkout], references: [idWorkout])
+
+  WorkoutSet WorkoutSets[]
+
+  @@map("workout_exercises")
+}
+
+model WorkoutSets {
+  idSet             Int @id @default(autoincrement()) @map("id_set")
+  idWorkoutExercise Int @map("id_workout_exercise")
+  reps              Int
+  weight            Int
+
+  workoutExercises WorkoutExercises @relation(fields: [idWorkoutExercise], references: [idWorkoutExercise])
+
+  @@map("workout_sets")
 }

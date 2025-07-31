@@ -4,13 +4,16 @@ import { UserRepository } from "../repositories/UserRepository"
 import { validateLogin, validateUser } from "../../utils/validateUser"
 import { InvalidRequest } from "../errors/HttpError"
 import { JWTClass } from "../../utils/jwt"
+import { Redis } from "../../utils/redis"
 
 const router = express.Router()
-const service = new UserService(new UserRepository(), new JWTClass(process.env.JWT_TOKEN!))
+const service = new UserService(new UserRepository(), new JWTClass(process.env.JWT_TOKEN!), new Redis())
 
 router.post("/user", async (req: Request, res: Response) => {
     const { email, name, password } = req.body
+
     const validUser = validateUser({ email, name, password })
+
     if (validUser.error) {
         return res.status(400).json({
             message: "Invalid user.",

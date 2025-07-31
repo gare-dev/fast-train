@@ -4,12 +4,13 @@ import { UserRepository } from "../repositories/UserRepository";
 import hashPassword from "../../utils/hashPassword"
 import bcrypt from "bcrypt"
 import { JWTClass } from "../../utils/jwt"
-
+import { Redis } from "../../utils/redis"
 
 export class UserService {
     constructor(
         private repository: UserRepository,
-        private jwtHandler: JWTClass
+        private jwtHandler: JWTClass,
+        private redis: Redis
     ) { }
 
     async createUser(user: Omit<CreateUserDTO, "idUser">) {
@@ -34,6 +35,8 @@ export class UserService {
         if (!user || !(await bcrypt.compare(password, user.password))) {
             throw new CustomError("Incorrect email or password.", 401, "INCORRECT_LOGIN")
         }
+
+        this.redis.setRedis(user.email, { name: user.name, email: user.email, idUser: user.idUser }, 86400 * 2)
         return this.jwtHandler.generateJWT({ email: user.email })
     }
 }
