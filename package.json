@@ -9,7 +9,8 @@
     "server"
   ],
   "scripts": {
-    "dev:server": "npm --workspace server run dev"
+    "dev:server": "npm --workspace server run dev",
+    "dev:server:prisma-studio": "npm --workspace server run prisma-studio"
   },
   "keywords": [],
   "author": "",
