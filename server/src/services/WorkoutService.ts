@@ -15,19 +15,11 @@ export class WorkoutService {
         if (!workout) throw new CustomError("Workout is required.", 400, "WORKOUT_MISSING")
 
         const jwt = this.jwtHandler.verifyJWT(token)
+        const user = await this.redis.getRedis(jwt?.email!) as { email: string, idUser: number, name: string }
 
-        if (!jwt) throw new CustomError("Unauthenticated.", 401, "UNAUTHENTICATED")
-
-
-        const user = await this.redis.getRedis(jwt.email) as { email: string, idUser: number, name: string }
-
-        if (!user) throw new CustomError("Unauthenticated.", 401, "UNAUTHENTICATED")
-
-        const newWorkout = await this.repository.create({
+        return await this.repository.create({
             idUser: user.idUser,
             workoutName: workout.workoutName
         })
-
-        return newWorkout
     }
 }

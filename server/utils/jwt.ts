@@ -6,7 +6,7 @@ export interface UserCache {
 }
 
 export class JWTClass {
-    jwt_token: string
+    private jwt_token: string
 
     constructor(
         jwt_token: string) {
